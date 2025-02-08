@@ -1,0 +1,22 @@
+main {
+  padding: 60px 0 100px;
+}
+body {
+  margin: 0;
+  background-color: #f8f9fa;
+}
+li {
+  list-style: none;
+}
+p {
+  margin: 0;
+}
+.error-field {
+  border: 2px solid red;
+  padding: 8px;
+  border-radius: 5px;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+}

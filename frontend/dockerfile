@@ -1,6 +1,12 @@
-FROM node:20
+FROM node:18
 
 WORKDIR /usr/src/app
 
-ENV LANG=C.UTF-8
-ENV TZ =Asia/Tokyo
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000 5173
+
+CMD ["npm", "run", "dev"]
