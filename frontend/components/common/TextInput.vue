@@ -3,6 +3,7 @@ type Props = {
   id: string;
   modelValue: string;
   placeholder?: string;
+  required?: boolean;
 };
 const props = defineProps<Props>();
 
@@ -20,6 +21,7 @@ const handleChange = (event: Event) => {
     :value="modelValue"
     :placeholder="placeholder"
     @input="handleChange"
+    :required="required"
   />
 </template>
 

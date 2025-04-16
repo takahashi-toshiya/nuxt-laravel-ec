@@ -1,4 +1,4 @@
-import { useUserStore } from "~/store/user";
+import { useUserStore } from "~/store/userStore";
 
 export default function useAuth() {
   const userStore = useUserStore();

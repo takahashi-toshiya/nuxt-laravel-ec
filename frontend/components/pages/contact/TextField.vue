@@ -2,19 +2,19 @@
 import ItemTitle from "./ItemTitle.vue";
 
 type Props = {
-  name: string;
   label: string;
   required: boolean;
   uniqueId: string;
+  modelValue?: string;
   error?: string;
 };
 
-const emit = defineEmits(["update:name"]);
+const emit = defineEmits(["update:modelValue"]);
 const props = defineProps<Props>();
 
 const handleInput = (event: any) => {
   const target = event.target as HTMLInputElement;
-  emit("update:name", target.value);
+  emit("update:modelValue", target.value);
 };
 </script>
 
@@ -29,7 +29,7 @@ const handleInput = (event: any) => {
     type="text"
     id="name"
     :required="props.required"
-    :value="props.name"
+    :value="props.modelValue"
     @input="handleInput"
   />
   <p v-if="error" class="error-message">{{ error }}</p>

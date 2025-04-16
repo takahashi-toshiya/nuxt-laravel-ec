@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import LoginButton from "@/components/common/LoginButton.vue";
+import Button from "@/components/common/Button.vue";
 import CardLayout from "@/components/layouts/CardLayout.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
 import { login } from "@/api/auth";
 import { getLoginUser } from "@/api/user";
-import FormField from "@/components/pages/login/FormField.vue";
-import { useUserStore } from "@/store/user";
+import FormField from "~/components/form/FormField.vue";
+import { useUserStore } from "~/store/userStore";
+import FormLayout from "~/components/layouts/FormLayout.vue";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -30,7 +31,7 @@ const [password, passwordProps] = defineField("password");
 
 const loginError = ref<string | null>(null);
 
-const loginClick = handleSubmit(async (values) => {
+const handleLogin = handleSubmit(async (values) => {
   try {
     await login(values);
 
@@ -49,35 +50,32 @@ const loginClick = handleSubmit(async (values) => {
 });
 </script>
 
-<!--学習を進めるため一旦レイアウトは無視-->
 <template>
   <CardLayout>
     <template v-slot:header>ログイン</template>
     <template v-slot:body>
-      <div class="form-container">
-        <form @submit.prevent="loginClick">
-          <FormField
-            id="email"
-            label="メールアドレス"
-            v-model="email"
-            placeholder="メールアドレスを入力"
-            :errorMessage="errors.email"
-            v-bind="emailProps"
-          />
-          <FormField
-            id="password"
-            label="パスワード"
-            v-model="password"
-            placeholder="パスワードを入力"
-            :errorMessage="errors.password"
-            v-bind="passwordProps"
-          />
-          <p v-if="loginError">{{ loginError }}</p>
-          <div class="login-button">
-            <LoginButton label="ログイン" color="blue" />
-          </div>
-        </form>
-      </div>
+      <FormLayout
+        buttonText="ログイン"
+        buttonColor="blue"
+        @submit="handleLogin"
+      >
+        <FormField
+          id="email"
+          label="メールアドレス"
+          v-model="email"
+          placeholder="メールアドレスを入力"
+          :error-message="errors.email"
+          v-bind="emailProps"
+        />
+        <FormField
+          id="password"
+          label="パスワード"
+          v-model="password"
+          placeholder="パスワードを入力"
+          :error-message="errors.password"
+          v-bind="passwordProps"
+        />
+      </FormLayout>
     </template>
   </CardLayout>
 </template>

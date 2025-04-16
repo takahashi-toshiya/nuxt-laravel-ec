@@ -2,9 +2,15 @@ export async function login(credentials: {
   email: string;
   password: string;
 }): Promise<void> {
-  await $fetch("http://localhost/api/login", {
+  await customFetch("http://localhost/api/login", {
     method: "POST",
-    credentials: "include",
     body: credentials,
+  });
+}
+
+export async function logout(): Promise<void> {
+  await customFetch("http://localhost/api/signout", {
+    method: "GET",
+    credentials: "include",
   });
 }

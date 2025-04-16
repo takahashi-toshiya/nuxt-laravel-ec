@@ -4,15 +4,17 @@ type Props = {
   color: "red" | "blue";
 };
 const props = defineProps<Props>();
-const emit = defineEmits(["login-click"]);
+const emit = defineEmits(["button-click"]);
 
 const handleClick = (event: MouseEvent) => {
-  emit("login-click", event);
+  emit("button-click", event);
 };
 </script>
 
 <template>
-  <button :class="props.color" @click="handleClick">{{ props.label }}</button>
+  <button :class="props.color" @click="handleClick" curs>
+    {{ props.label }}
+  </button>
 </template>
 
 <style scoped>
@@ -21,6 +23,7 @@ button {
   border-radius: 3px;
   border: none;
   color: #fff;
+  cursor: pointer;
 }
 .red {
   background-color: red;

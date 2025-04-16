@@ -2,16 +2,16 @@
 import ItemTitle from "./ItemTitle.vue";
 
 type Props = {
-  gender: number | null;
   label: string;
   required: boolean;
+  modelValue?: number | null;
   error?: string;
 };
 const props = defineProps<Props>();
-const emit = defineEmits(["update:gender"]);
+const emit = defineEmits(["update:modelValue"]);
 
 const handleInput = (value: number) => {
-  emit("update:gender", value);
+  emit("update:modelValue", value);
 };
 </script>
 
@@ -24,7 +24,7 @@ const handleInput = (value: number) => {
         type="radio"
         name="gender"
         value="0"
-        :checked="props.gender === 0"
+        :checked="props.modelValue === 0"
         @change="handleInput(0)"
       />男性
     </label>
@@ -36,7 +36,7 @@ const handleInput = (value: number) => {
         type="radio"
         name="gender"
         value="1"
-        :checked="props.gender === 1"
+        :checked="props.modelValue === 1"
         @change="handleInput(1)"
       />女性
     </label>

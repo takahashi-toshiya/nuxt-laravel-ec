@@ -21,7 +21,7 @@
   justify-content: center;
 }
 .container {
-  width: 760px;
+  width: 600px;
   background-color: #fff;
 }
 .card {
