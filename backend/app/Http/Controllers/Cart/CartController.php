@@ -24,7 +24,6 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $userId = Auth::id();
-        Log::info($userId);
         $data = [
             'user_id' => $userId,
             'product_id' => $request->product_id,

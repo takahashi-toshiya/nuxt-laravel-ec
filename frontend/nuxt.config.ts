@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   css: ["@/assets/css/global.css"],
-  modules: ["@pinia/nuxt", "@nuxt/ui", "@nuxtjs/i18n"],
+  modules: ["@pinia/nuxt", "@nuxt/ui", "@nuxtjs/i18n", "nuxt-mcp"],
   i18n: {
     strategy: "prefix_except_default", // デフォルト言語はプレフィックス無し
     defaultLocale: "ja", // デフォルト言語を日本語

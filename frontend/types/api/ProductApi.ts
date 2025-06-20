@@ -1,4 +1,4 @@
-export type ProductModel = {
+export type Product = {
   id: number;
   name: string;
   price: number;
@@ -8,9 +8,9 @@ export type ProductModel = {
   alt?: string;
 };
 
-export type ProductByPage = {
+export type ProductByPageApiResponse = {
   currentPage: number;
-  data: ProductModel[];
+  data: Product[];
   perPage: number;
   total: number;
 };

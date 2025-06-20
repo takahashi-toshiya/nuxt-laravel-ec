@@ -3,8 +3,7 @@ import { useUserStore } from "~/store/userStore";
 import { useCsrfTokenStore } from "~/store/csrfTokenStore";
 import Button from "../common/Button.vue";
 import AppLink from "../common/AppLink.vue";
-import { logout } from "~/api/auth";
-import { getLoginUser } from "~/api/user";
+import { logoutService } from "~/services/authService";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -14,7 +13,7 @@ const isDropdownVisible = ref(false);
 const isLogged = computed(() => userStore.isLogged);
 
 const handleLogout = async () => {
-  await logout();
+  await logoutService();
   userStore.resetUser();
   csrfTokenStore.resetCsrfToken();
 };
@@ -28,7 +27,7 @@ const handleDropdown = () => {
 };
 
 const handleGoToCart = () => {
-  //router.push("/cart");
+  router.push("/cart");
 };
 </script>
 

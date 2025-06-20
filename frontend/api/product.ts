@@ -1,6 +1,8 @@
-import type { ProductByPage } from "~/types/api/ProductModel";
+import type { ProductByPageApiResponse } from "~/types/api/ProductApi";
 
-export async function getProductsByPage(page: number): Promise<ProductByPage> {
+export async function fetchProductsByPageApi(
+  page: number
+): Promise<ProductByPageApiResponse> {
   return await $fetch(`http://localhost/api/products?page=${page}`, {
     method: "GET",
   });

@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getProductsByPage } from "~/api/product";
 import ErrorModal from "~/components/modal/ErrorModal.vue";
 import LoginRequiredModal from "~/components/modal/LoginRequiredModal.vue";
+import { getProductsByPage } from "~/services/productService";
 import { useCartStore } from "~/store/cartStore";
 import { useUserStore } from "~/store/userStore";
-import type { ProductModel } from "~/types/api/ProductModel";
+import type { ProductModel } from "~/types/model/ProductModel";
+import {
+  addCartUsecase,
+  incrementQuantityUsecase,
+} from "~/usecases/cartUsecase";
 
 const router = useRouter();
 const cartStore = useCartStore();
@@ -34,8 +38,16 @@ const fetchProducts = async (page = currentPage.value) => {
 
 const handleAddToCart = async (productId: number) => {
   if (!isLoggedIn) return (isLoginRequired.value = true);
-  useCartStore().addCart(productId, 1);
-  //await addCart(productId);
+
+  await addCartUsecase(productId);
+};
+
+const handleIncrement = async (productId: number) => {
+  await incrementQuantityUsecase(productId);
+};
+
+const handleDecrementOrRemove = (productId: number) => {
+  console.log("devre");
 };
 
 const handleLoginRequiredCOnfirm = () => {
@@ -44,15 +56,17 @@ const handleLoginRequiredCOnfirm = () => {
 
 onMounted(async () => {
   await fetchProducts();
-  await cartStore.fetchCart();
+  await cartStore.getCart();
 });
 </script>
 
 <template>
   <ProductList
     :products="products"
-    :carts="cartStore.cart"
+    :carts="cartStore.cartList"
     @cartButtonClick="handleAddToCart"
+    @increment="handleIncrement"
+    @decrementOrRemove="handleDecrementOrRemove"
   />
   <div class="product-paginate">
     <UPagination

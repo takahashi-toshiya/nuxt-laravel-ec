@@ -4,6 +4,7 @@ main {
 body {
   margin: 0;
   background-color: #f8f9fa;
+  color: #000;
 }
 li {
   list-style: none;

@@ -1,4 +1,4 @@
-export type UserModel = {
+export type UserApiResponse = {
   id: number;
   name: string;
   email: string;

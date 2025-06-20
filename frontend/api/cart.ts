@@ -1,17 +1,17 @@
-import type { CartModel } from "~/types/api/CartModel";
+import type { CartApiResponse } from "~/types/api/CartApi";
 
-export async function getCart(): Promise<{ data: CartModel[] }> {
-  const response = await customFetch<{ data: CartModel[] }>(
+export async function fetchCartApi(): Promise<CartApiResponse> {
+  const response = await customFetch<CartApiResponse>(
     "http://localhost/api/cart",
     {
       method: "GET",
     }
   );
 
-  return response; // ✅ これで `response` が `{ data: CartModel[] }` 型になる
+  return response;
 }
 
-export async function addCart(
+export async function addCartApi(
   productId: number,
   quantity?: number
 ): Promise<void> {
@@ -21,5 +21,21 @@ export async function addCart(
       product_id: productId,
       quantity: quantity ?? 1,
     }),
+  });
+}
+
+export async function updateCartApi(
+  productId: number,
+  quantity: number
+): Promise<void> {
+  await customFetch(`http://localhost/api/cart/${productId}`, {
+    method: "PUT",
+    body: JSON.stringify({ quantity }),
+  });
+}
+
+export async function deleteCartApi(productId: number): Promise<void> {
+  await customFetch(`http://localhost/api/cart/${productId}`, {
+    method: "DELETE",
   });
 }

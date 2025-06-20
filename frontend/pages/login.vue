@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import Button from "@/components/common/Button.vue";
 import CardLayout from "@/components/layouts/CardLayout.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
-import { login } from "@/api/auth";
-import { getLoginUser } from "@/api/user";
 import FormField from "~/components/form/FormField.vue";
 import { useUserStore } from "~/store/userStore";
 import FormLayout from "~/components/layouts/FormLayout.vue";
+import { getLoginUser } from "~/services/userService";
+import { loginService } from "~/services/authService";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -33,7 +32,7 @@ const loginError = ref<string | null>(null);
 
 const handleLogin = handleSubmit(async (values) => {
   try {
-    await login(values);
+    await loginService(values);
 
     const loginUser = await getLoginUser();
 

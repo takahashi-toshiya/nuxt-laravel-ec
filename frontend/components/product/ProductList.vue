@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { ProductModel } from "~/types/api/ProductModel";
 import Image from "../common/Image.vue";
-import type { CartModel } from "~/types/api/CartModel";
+import type { CartModel } from "~/types/model/CartModel";
+import type { ProductModel } from "~/types/model/ProductModel";
+import QuantityControl from "./QuantityControl.vue";
 
 type Props = {
-  product roductModel[];
+  products: ProductModel[];
   carts: CartModel[];
 };
 
@@ -12,11 +13,18 @@ const { t } = useI18n();
 
 const props = defineProps<Props>();
 
-const emit = defineEmits(["cartButtonClick"]);
+const emit = defineEmits(["cartButtonClick", "increment", "decrementOrRemove"]);
 
 const cartButtonClick = (productId: number) => {
   emit("cartButtonClick", productId);
 };
+
+const cartMap = computed(() => {
+  return props.carts.reduce((map, cart) => {
+    map[cart.productId] = cart;
+    return map;
+  }, {} as Record<number, CartModel>);
+});
 </script>
 
 <template>
@@ -36,10 +44,13 @@ const cartButtonClick = (productId: number) => {
       <p class="product-card__comment">{{ product.comment }}</p>
 
       <!-- カートに商品があるか判定 -->
-      <template v-if="carts.some((cart) => cart.productId === product.id)">
-        <div class="quantity-controls">
-          <p>test</p>
-        </div>
+      <template v-if="cartMap[product.id]">
+        <QuantityControl
+          :productId="product.id"
+          :cart="cartMap[product.id]"
+          @increment="$emit('increment', product.id)"
+          @decrementOrRemove="$emit('decrementOrRemove', product.id)"
+        />
       </template>
       <template v-else>
         <button

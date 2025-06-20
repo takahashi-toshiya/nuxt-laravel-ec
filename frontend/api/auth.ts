@@ -1,4 +1,4 @@
-export async function login(credentials: {
+export async function loginApi(credentials: {
   email: string;
   password: string;
 }): Promise<void> {
@@ -8,7 +8,7 @@ export async function login(credentials: {
   });
 }
 
-export async function logout(): Promise<void> {
+export async function logoutApi(): Promise<void> {
   await customFetch("http://localhost/api/signout", {
     method: "GET",
     credentials: "include",

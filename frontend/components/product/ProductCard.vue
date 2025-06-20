@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProductModel } from "~/types/api/ProductModel";
+import type { ProductModel } from "~/types/model/ProductModel";
 import Image from "../common/Image.vue";
 
 type Props = {
