@@ -6,9 +6,9 @@ use App\Models\Cart;
 
 class CartRepository
 {
-    public function index()
+    public function index(string $userId)
     {
-        $result = Cart::all();
+        $result = Cart::with('product')->where('user_id', $userId)->get();
         return $result;
     }
 

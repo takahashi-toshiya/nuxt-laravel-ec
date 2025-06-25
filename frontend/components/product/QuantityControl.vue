@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { CartModel } from "~/types/model/CartModel";
+import type { CartItem, CartModel } from "~/types/model/CartModel";
 
 type Props = {
   productId: number;
-  cart: CartModel;
+  cart: CartItem;
 };
 
 const props = defineProps<Props>();

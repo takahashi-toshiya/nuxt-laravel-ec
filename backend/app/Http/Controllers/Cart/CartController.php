@@ -17,7 +17,8 @@ class CartController extends Controller
 
     public function index()
     {
-        $result = $this->cartService->index();
+        $userId = Auth::id();
+        $result = $this->cartService->index($userId);
         return CartResource::collection($result);
     }
 

@@ -10,13 +10,12 @@ class CartService
     {
     }
 
-    public function index()
+    public function index(string $userId)
     {
-        $result = $this->cartRepository->index();
+        $result = $this->cartRepository->index($userId);
         return $result;
     }
 
-    // DTOを学んでもいいかもしれん
     public function store(array $data)
     {
         return $this->cartRepository->store($data);

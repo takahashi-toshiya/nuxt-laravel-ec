@@ -1,10 +1,11 @@
+import type { CartItem } from "~/types/model/CartModel";
 import { getCartService as fetchCart } from "~/services/cartService";
-import type { CartModel } from "~/types/model/CartModel";
 import { defineStore } from "pinia";
+import type { ProductModel } from "~/types/model/ProductModel";
 
 export const useCartStore = defineStore("cart", {
   state: () => ({
-    cart: new Map<number, CartModel>(), // productId をキーにした Map
+    cart: new Map<number, CartItem>(), // productId をキーにした Map
   }),
   getters: {
     cartList: (state) => Array.from(state.cart.values()), // 表示用に配列に変換
@@ -12,14 +13,19 @@ export const useCartStore = defineStore("cart", {
   actions: {
     async getCart() {
       const response = await fetchCart();
-      const cartMap = new Map<number, CartModel>();
+      console.log(response);
+      const cartMap = new Map<number, CartItem>();
+
       response.forEach((item) => {
-        cartMap.set(item.productId, item);
+        cartMap.set(item.productId, {
+          product: item.product,
+          quantity: item.quantity,
+        });
       });
       this.cart = cartMap;
     },
-    addCart(productId: number, quantity = 1) {
-      this.cart.set(productId, { productId, quantity });
+    addCart(product: ProductModel, quantity = 1) {
+      this.cart.set(product.id, { quantity, product });
     },
     incrementQuantity(productId: number) {
       const item = this.cart.get(productId);

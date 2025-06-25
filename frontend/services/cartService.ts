@@ -7,11 +7,11 @@ import {
 import type { CartModel } from "@/types/model/CartModel";
 
 export async function getCartService(): Promise<CartModel[]> {
-  const res = await fetchCartApi();
-
-  return res.data.map((item) => ({
+  const response = await fetchCartApi();
+  return response.data.map((item) => ({
     productId: item.productId,
     quantity: item.quantity,
+    product: item.product,
   }));
 }
 

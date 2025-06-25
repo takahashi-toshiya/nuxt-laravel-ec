@@ -4,10 +4,12 @@ import {
   updateCartQuantityService,
 } from "~/services/cartService";
 
-export async function addCartUsecase(productId: number) {
+export async function addCartUsecase(
+  product: import("~/types/model/ProductModel").ProductModel
+) {
   const store = useCartStore();
-  store.addCart(productId);
-  addCartService(productId);
+  store.addCart(product);
+  await addCartService(product.id);
 }
 
 export async function incrementQuantityUsecase(productId: number) {

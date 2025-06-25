@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import Image from "../common/Image.vue";
-import type { CartModel } from "~/types/model/CartModel";
+import type { CartItem } from "~/types/model/CartModel";
 import type { ProductModel } from "~/types/model/ProductModel";
 import QuantityControl from "./QuantityControl.vue";
 
 type Props = {
   products: ProductModel[];
-  carts: CartModel[];
+  carts: CartItem[];
 };
 
 const { t } = useI18n();
@@ -15,15 +15,15 @@ const props = defineProps<Props>();
 
 const emit = defineEmits(["cartButtonClick", "increment", "decrementOrRemove"]);
 
-const cartButtonClick = (productId: number) => {
-  emit("cartButtonClick", productId);
+const cartButtonClick = (product: ProductModel) => {
+  emit("cartButtonClick", product);
 };
 
 const cartMap = computed(() => {
   return props.carts.reduce((map, cart) => {
-    map[cart.productId] = cart;
+    map[cart.product.id] = cart;
     return map;
-  }, {} as Record<number, CartModel>);
+  }, {} as Record<number, CartItem>);
 });
 </script>
 
@@ -34,32 +34,26 @@ const cartMap = computed(() => {
       v-for="product in products"
       :key="product.id"
     >
-      <Image
-        class="product-card__image"
-        :src="product.imagePath"
-        :alt="product.alt"
-      />
-      <p class="product-card__title">{{ product.name }}</p>
-      <p class="product-card__price">{{ product.price.toLocaleString() }}</p>
-      <p class="product-card__comment">{{ product.comment }}</p>
-
-      <!-- カートに商品があるか判定 -->
-      <template v-if="cartMap[product.id]">
-        <QuantityControl
-          :productId="product.id"
-          :cart="cartMap[product.id]"
-          @increment="$emit('increment', product.id)"
-          @decrementOrRemove="$emit('decrementOrRemove', product.id)"
-        />
-      </template>
-      <template v-else>
-        <button
-          class="product-card__button"
-          @click="cartButtonClick(product.id)"
-        >
-          {{ t("product.add_to_cart") }}
-        </button>
-      </template>
+      <ProductCard :product="product">
+        <template #actions>
+          <template v-if="cartMap[product.id]">
+            <QuantityControl
+              :productId="product.id"
+              :cart="cartMap[product.id]"
+              @increment="$emit('increment', product.id)"
+              @decrementOrRemove="$emit('decrementOrRemove', product.id)"
+            />
+          </template>
+          <template v-else>
+            <button
+              class="product-card__button"
+              @click="cartButtonClick(product)"
+            >
+              {{ t("product.add_to_cart") }}
+            </button>
+          </template>
+        </template>
+      </ProductCard>
     </div>
   </div>
 </template>

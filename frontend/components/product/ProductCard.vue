@@ -4,11 +4,17 @@ import Image from "../common/Image.vue";
 
 type Props = {
   product: ProductModel;
-  buttonText: string;
-  buttonClass: string;
+  showComment?: boolean;
 };
-
-defineProps<Props>();
+const props = withDefaults(
+  defineProps<{
+    product: ProductModel;
+    showComment?: boolean;
+  }>(),
+  {
+    showComment: true,
+  }
+);
 
 const emit = defineEmits(["cartButtonClick"]);
 
@@ -24,12 +30,12 @@ const cartButtonClick = (productId: number) => {
     :alt="product.alt"
   />
   <p class="product-card__title">{{ product.name }}</p>
-  <p class="product-card__price">{{ product.price.toLocaleString() }}</p>
-  <p class="product-card__comment">{{ product.comment }}</p>
-  <!-- ボタンのスロットを提供し、親から自由にカスタマイズできる -->
-  <button class="product-card__button" @click="cartButtonClick(product.id)">
-    {{ buttonText }}
-  </button>
+  <p class="product-card__price">{{ product.price?.toLocaleString() }}</p>
+  <p v-if="showComment !== false" class="product-card__comment">
+    {{ product.comment }}
+  </p>
+
+  <slot name="actions" />
 </template>
 
 <style scoped>

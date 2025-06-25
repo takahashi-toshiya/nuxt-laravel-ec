@@ -36,10 +36,10 @@ const fetchProducts = async (page = currentPage.value) => {
   }
 };
 
-const handleAddToCart = async (productId: number) => {
+const handleAddToCart = async (product: ProductModel) => {
   if (!isLoggedIn) return (isLoginRequired.value = true);
 
-  await addCartUsecase(productId);
+  await addCartUsecase(product);
 };
 
 const handleIncrement = async (productId: number) => {
