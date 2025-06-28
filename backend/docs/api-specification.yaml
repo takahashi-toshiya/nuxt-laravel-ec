@@ -1,0 +1,464 @@
+openapi: 3.0.0
+info:
+  title: EC Site API
+  version: 1.0.0
+  description: 学習用ECサイトのREST API仕様書
+  contact:
+    email: support@example.com
+
+servers:
+  - url: http://localhost:8000
+    description: 開発環境
+
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Laravel Sanctum Token
+
+  schemas:
+    Product:
+      type: object
+      title: 商品
+      description: 商品情報のスキーマ
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: 商品ID
+        name:
+          type: string
+          example: スマートフォン
+          description: 商品名
+        price:
+          type: integer
+          example: 89800
+          description: 価格
+        stock:
+          type: integer
+          example: 10
+          description: 在庫数
+        comment:
+          type: string
+          nullable: true
+          example: 最新モデルです
+          description: 商品説明
+        image_path:
+          type: string
+          nullable: true
+          example: /images/smartphone.jpg
+          description: 商品画像パス
+        created_at:
+          type: string
+          format: datetime
+          example: 2024-01-01T00:00:00Z
+          description: 作成日時
+        updated_at:
+          type: string
+          format: datetime
+          example: 2024-01-01T00:00:00Z
+          description: 更新日時
+
+    User:
+      type: object
+      title: ユーザー
+      description: ユーザー情報のスキーマ
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: ユーザーID
+        name:
+          type: string
+          example: 田中太郎
+          description: ユーザー名
+        email:
+          type: string
+          format: email
+          example: tanaka@example.com
+          description: メールアドレス
+        email_verified_at:
+          type: string
+          format: datetime
+          nullable: true
+          description: メール認証日時
+        created_at:
+          type: string
+          format: datetime
+          example: 2024-01-01T00:00:00Z
+          description: 作成日時
+        updated_at:
+          type: string
+          format: datetime
+          example: 2024-01-01T00:00:00Z
+          description: 更新日時
+
+    Cart:
+      type: object
+      title: カート
+      description: カート情報のスキーマ
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: カートID
+        user_id:
+          type: integer
+          example: 1
+          description: ユーザーID
+        product_id:
+          type: integer
+          example: 1
+          description: 商品ID
+        quantity:
+          type: integer
+          example: 2
+          description: 数量
+        product:
+          $ref: '#/components/schemas/Product'
+        created_at:
+          type: string
+          format: datetime
+          example: 2024-01-01T00:00:00Z
+          description: 作成日時
+        updated_at:
+          type: string
+          format: datetime
+          example: 2024-01-01T00:00:00Z
+          description: 更新日時
+
+    ErrorResponse:
+      type: object
+      title: エラーレスポンス
+      properties:
+        message:
+          type: string
+          example: The given data was invalid.
+          description: エラーメッセージ
+        errors:
+          type: object
+          description: バリデーションエラー詳細
+
+    PaginationMeta:
+      type: object
+      title: ページネーション情報
+      properties:
+        current_page:
+          type: integer
+          example: 1
+          description: 現在のページ番号
+        per_page:
+          type: integer
+          example: 6
+          description: 1ページあたりのアイテム数
+        total:
+          type: integer
+          example: 24
+          description: 全アイテム数
+        last_page:
+          type: integer
+          example: 4
+          description: 最終ページ番号
+        from:
+          type: integer
+          example: 1
+          description: 開始アイテム番号
+        to:
+          type: integer
+          example: 6
+          description: 終了アイテム番号
+
+tags:
+  - name: 認証
+    description: ユーザー認証関連のAPI
+  - name: 商品
+    description: 商品管理関連のAPI
+  - name: カート
+    description: ショッピングカート関連のAPI
+  - name: ユーザー
+    description: ユーザー情報関連のAPI
+
+paths:
+  /api/signup:
+    post:
+      summary: ユーザー登録
+      description: 新規ユーザーアカウントを作成する
+      tags:
+        - 認証
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  example: 田中太郎
+                  description: ユーザー名
+                email:
+                  type: string
+                  format: email
+                  example: tanaka@example.com
+                  description: メールアドレス
+                password:
+                  type: string
+                  format: password
+                  example: password123
+                  description: パスワード
+      responses:
+        '200':
+          description: ユーザー登録成功
+          content:
+            application/json:
+              schema:
+                type: object
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  handle_error:
+                    type: string
+                    example: Database error occurred
+
+  /api/login:
+    post:
+      summary: ユーザーログイン
+      description: メールアドレスとパスワードでユーザー認証を行う
+      tags:
+        - 認証
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                  description: メールアドレス
+                password:
+                  type: string
+                  format: password
+                  example: password123
+                  description: パスワード
+      responses:
+        '200':
+          description: ログイン成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Authenticated
+        '401':
+          description: 認証失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Credentials error
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/products:
+    get:
+      summary: 商品一覧取得
+      description: 商品をページネーション付きで取得する
+      tags:
+        - 商品
+      parameters:
+        - name: page
+          in: query
+          description: ページ番号
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: 商品一覧取得成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Product'
+                  - $ref: '#/components/schemas/PaginationMeta'
+
+  /api/user:
+    get:
+      summary: 現在のユーザー情報取得
+      description: 認証済みユーザーの情報を取得する
+      tags:
+        - ユーザー
+      security:
+        - sanctum: []
+      responses:
+        '200':
+          description: ユーザー情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: 認証が必要
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+
+  /api/signout:
+    get:
+      summary: ユーザーログアウト
+      description: 現在のセッションを終了してユーザーをログアウトする
+      tags:
+        - 認証
+      security:
+        - sanctum: []
+      responses:
+        '200':
+          description: ログアウト成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Signed out successfully
+        '401':
+          description: 認証が必要
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+
+  /api/cart:
+    get:
+      summary: カート情報取得
+      description: 認証済みユーザーのカート内容を取得する
+      tags:
+        - カート
+      security:
+        - sanctum: []
+      responses:
+        '200':
+          description: カート情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        '401':
+          description: 認証が必要
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+
+    post:
+      summary: カートに商品追加
+      description: 指定した商品をカートに追加する
+      tags:
+        - カート
+      security:
+        - sanctum: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - product_id
+                - quantity
+              properties:
+                product_id:
+                  type: integer
+                  example: 1
+                  description: 商品ID
+                quantity:
+                  type: integer
+                  example: 2
+                  minimum: 1
+                  description: 数量
+      responses:
+        '200':
+          description: カート追加成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '401':
+          description: 認証が必要
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+        '404':
+          description: 商品が見つからない
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product not found
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

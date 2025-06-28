@@ -1,0 +1,96 @@
+@startuml EC_Site_ER_Diagram
+
+title EC Site Database ER Diagram
+
+entity users {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR(255)
+  * email : VARCHAR(255) <<UK>>
+  email_verified_at : TIMESTAMP
+  * password : VARCHAR(255)
+  remember_token : VARCHAR(100)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity products {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR(255)
+  * price : INT UNSIGNED
+  * stock : INT UNSIGNED
+  comment : VARCHAR(255)
+  image_path : VARCHAR(255)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity carts {
+  * id : BIGINT <<PK>>
+  --
+  * user_id : BIGINT <<FK>>
+  * product_id : BIGINT <<FK>>
+  * quantity : INT UNSIGNED
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity personal_access_tokens {
+  * id : BIGINT <<PK>>
+  --
+  * tokenable_type : VARCHAR(255)
+  * tokenable_id : BIGINT
+  * name : VARCHAR(255)
+  * token : VARCHAR(64) <<UK>>
+  abilities : TEXT
+  last_used_at : TIMESTAMP
+  expires_at : TIMESTAMP
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity password_reset_tokens {
+  * email : VARCHAR(255) <<PK>>
+  --
+  * token : VARCHAR(255)
+  created_at : TIMESTAMP
+}
+
+entity sessions {
+  * id : VARCHAR(255) <<PK>>
+  --
+  user_id : BIGINT <<FK>>
+  ip_address : VARCHAR(45)
+  user_agent : TEXT
+  * payload : LONGTEXT
+  * last_activity : INT
+}
+
+users ||--o{ carts
+products ||--o{ carts
+users ||--o{ sessions
+users ||--o{ personal_access_tokens
+users ||--o{ password_reset_tokens
+
+note right of carts
+  カートテーブル
+  ユーザーと商品の中間テーブル
+  数量情報を保持
+  CASCADE DELETE設定
+end note
+
+note right of products
+  商品テーブル
+  ECサイトの中核エンティティ
+  価格・在庫情報を管理
+  画像パスを保存
+end note
+
+note right of users
+  ユーザーテーブル
+  Laravel標準のユーザー認証
+  Sanctum認証と連携
+end note
+
+@enduml
