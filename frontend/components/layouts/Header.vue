@@ -10,12 +10,14 @@ const userStore = useUserStore();
 const csrfTokenStore = useCsrfTokenStore();
 
 const isDropdownVisible = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
 const isLogged = computed(() => userStore.isLogged);
 
 const handleLogout = async () => {
   await logoutService();
   userStore.resetUser();
   csrfTokenStore.resetCsrfToken();
+  isDropdownVisible.value = false;
 };
 
 const handleLogin = () => {
@@ -28,7 +30,26 @@ const handleDropdown = () => {
 
 const handleGoToCart = () => {
   router.push("/cart");
+  isDropdownVisible.value = false;
 };
+
+const closeDropdown = () => {
+  isDropdownVisible.value = false;
+};
+
+const handleClickOutside = (event: Event) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+    closeDropdown();
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <template>
@@ -40,6 +61,7 @@ const handleGoToCart = () => {
       <ul class="nav__list">
         <li
           class="nav__item nav__dropdown-wrapper"
+          ref="dropdownRef"
           @click.prevent="handleDropdown"
         >
           <span class="nav__toggle">{{
