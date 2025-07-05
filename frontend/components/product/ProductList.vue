@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Image from "../common/Image.vue";
 import type { CartItem } from "~/types/model/CartModel";
 import type { ProductModel } from "~/types/model/ProductModel";
 import QuantityControl from "./QuantityControl.vue";

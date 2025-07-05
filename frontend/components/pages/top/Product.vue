@@ -5,6 +5,7 @@ import LoginRequiredModal from "~/components/modal/LoginRequiredModal.vue";
 import { getProductsByPage } from "~/services/productService";
 import { useCartStore } from "~/store/cartStore";
 import { useUserStore } from "~/store/userStore";
+import { useLoadingStore } from "~/store/loadingStore";
 import type { ProductModel } from "~/types/model/ProductModel";
 import {
   addCartUsecase,
@@ -16,6 +17,7 @@ const cartStore = useCartStore();
 const { t } = useI18n();
 const { isError, errorMessage, showError } = useError();
 const { isLoggedIn } = useUserStore();
+const loadingStore = useLoadingStore();
 
 const products = ref<ProductModel[]>([]);
 const currentPage = ref<number>(0);
@@ -24,16 +26,18 @@ const pageCount = ref<number>(0);
 const isLoginRequired = ref<boolean>(false);
 
 const fetchProducts = async (page = currentPage.value) => {
-  try {
-    const response = await getProductsByPage(page);
+  await loadingStore.withLoading(async () => {
+    try {
+      const response = await getProductsByPage(page);
 
-    products.value = response.data;
-    currentPage.value = response.currentPage;
-    total.value = response.total;
-    pageCount.value = response.perPage;
-  } catch (error: any) {
-    showError(error.message);
-  }
+      products.value = response.data;
+      currentPage.value = response.currentPage;
+      total.value = response.total;
+      pageCount.value = response.perPage;
+    } catch (error: any) {
+      showError(error.message);
+    }
+  }, "商品を読み込み中...");
 };
 
 const handleAddToCart = async (product: ProductModel) => {
@@ -56,35 +60,41 @@ const handleLoginRequiredCOnfirm = () => {
 
 onMounted(async () => {
   await fetchProducts();
-  await cartStore.getCart();
+  await loadingStore.withLoading(() => cartStore.getCart(), "カート情報を読み込み中...");
 });
 </script>
 
 <template>
-  <ProductList
-    :products="products"
-    :carts="cartStore.cartList"
-    @cartButtonClick="handleAddToCart"
-    @increment="handleIncrement"
-    @decrementOrRemove="handleDecrementOrRemove"
-  />
-  <div class="product-paginate">
-    <UPagination
-      v-model="currentPage"
-      :total="total"
-      :page-count="pageCount"
-      @update:modelValue="fetchProducts"
+  <div class="product-container">
+    <ProductList
+      :products="products"
+      :carts="cartStore.cartList"
+      @cartButtonClick="handleAddToCart"
+      @increment="handleIncrement"
+      @decrementOrRemove="handleDecrementOrRemove"
     />
+    <div class="product-paginate">
+      <UPagination
+        v-model="currentPage"
+        :total="total"
+        :page-count="pageCount"
+        @update:modelValue="fetchProducts"
+      />
+    </div>
+    <LoginRequiredModal
+      v-if="isLoginRequired"
+      :message="t('product.login_required')"
+      @confirm="handleLoginRequiredCOnfirm"
+    />
+    <ErrorModal v-if="isError" :message="errorMessage" @confirm="fetchProducts" />
   </div>
-  <LoginRequiredModal
-    v-if="isLoginRequired"
-    :message="t('product.login_required')"
-    @confirm="handleLoginRequiredCOnfirm"
-  />
-  <ErrorModal v-if="isError" :message="errorMessage" @confirm="fetchProducts" />
 </template>
 
 <style scoped>
+.product-container {
+  position: relative;
+}
+
 .product-paginate {
   display: flex;
   justify-content: center;

@@ -12,17 +12,25 @@ const emit = defineEmits(["increment", "decrementOrRemove"]);
 
 const cart = toRef(props, "cart");
 const quantity = computed(() => cart.value.quantity);
+
+const handleIncrement = () => {
+  emit('increment');
+};
+
+const handleDecrementOrRemove = () => {
+  emit('decrementOrRemove');
+};
 </script>
 
 <template>
   <div class="quantity-controls">
     <div class="button-wrapper">
-      <button @click="emit('decrementOrRemove')">
+      <button @click="handleDecrementOrRemove">
         <template v-if="quantity === 1">×</template>
         <template v-else>−</template>
       </button>
       <span>{{ quantity }}</span>
-      <button @click="$emit('increment')">＋</button>
+      <button @click="handleIncrement">＋</button>
     </div>
   </div>
 </template>

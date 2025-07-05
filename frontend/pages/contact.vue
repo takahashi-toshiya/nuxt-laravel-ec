@@ -5,7 +5,10 @@ import CardLayout from "~/components/layouts/CardLayout.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
 import { useForm } from "vee-validate";
+import { useLoadingStore } from "~/store/loadingStore";
 import TextField from "~/components/pages/contact/TextField.vue";
+
+const loadingStore = useLoadingStore();
 
 const schema = toTypedSchema(
   z.object({
@@ -27,9 +30,13 @@ const [name, nameProps] = defineField("name");
 const [email, emailProps] = defineField("email");
 const [gender, genderProps] = defineField("gender");
 
-const handleSendForm = handleSubmit((values) => {
-  console.log(values);
-  console.log("送信成功");
+const handleSendForm = handleSubmit(async (values) => {
+  await loadingStore.withLoading(async () => {
+    // 実際のAPI呼び出しの代わりにdelay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log(values);
+    console.log("送信成功");
+  }, "送信中...");
 });
 </script>
 

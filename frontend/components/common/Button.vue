@@ -12,7 +12,7 @@ const handleClick = (event: MouseEvent) => {
 </script>
 
 <template>
-  <button :class="props.color" @click="handleClick" curs>
+  <button :class="props.color" @click="handleClick">
     {{ props.label }}
   </button>
 </template>

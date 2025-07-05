@@ -8,9 +8,11 @@ import { useUserStore } from "~/store/userStore";
 import FormLayout from "~/components/layouts/FormLayout.vue";
 import { getLoginUser } from "~/services/userService";
 import { loginService } from "~/services/authService";
+import { useLoadingStore } from "~/store/loadingStore";
 
 const userStore = useUserStore();
 const router = useRouter();
+const loadingStore = useLoadingStore();
 
 const schema = toTypedSchema(
   z.object({
@@ -31,21 +33,23 @@ const [password, passwordProps] = defineField("password");
 const loginError = ref<string | null>(null);
 
 const handleLogin = handleSubmit(async (values) => {
-  try {
-    await loginService(values);
+  await loadingStore.withLoading(async () => {
+    try {
+      await loginService(values);
 
-    const loginUser = await getLoginUser();
+      const loginUser = await getLoginUser();
 
-    // Piniaにセット
-    await userStore.setUser({
-      id: loginUser.id,
-      name: loginUser.name,
-    });
+      // Piniaにセット
+      userStore.setUser({
+        id: loginUser.id,
+        name: loginUser.name,
+      });
 
-    await router.push("/");
-  } catch (error) {
-    loginError.value = "ログイン情報が誤っています";
-  }
+      await router.push("/");
+    } catch (error) {
+      loginError.value = "ログイン情報が誤っています";
+    }
+  }, "ログイン中...");
 });
 </script>
 
