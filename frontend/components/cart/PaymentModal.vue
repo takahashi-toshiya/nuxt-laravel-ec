@@ -135,4 +135,23 @@ onUnmounted(() => {
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* 決済フォーム入力欄のChrome autofill/ダークモード対応 */
+input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  /* ダークモード対応 */
+  color-scheme: light;
+  background-color: white;
+  color: black;
+}
+
+/* Chrome autofill対応 */
+input[type="text"]:-webkit-autofill,
+input[type="text"]:-webkit-autofill:hover,
+input[type="text"]:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: black !important;
+}
 </style>

@@ -16,8 +16,16 @@ const loadingStore = useLoadingStore();
 
 const schema = toTypedSchema(
   z.object({
-    email: z.string().min(1, { message: "Field is required" }),
-    password: z.string().min(1, { message: "Field is required" }),
+    email: z
+      .string()
+      .min(1, { message: "メールアドレスは必須です" })
+      .email({ message: "正しいメールアドレスを入力してください" })
+      .max(255, { message: "メールアドレスは255文字以内で入力してください" }),
+    password: z
+      .string()
+      .min(1, { message: "パスワードは必須です" })
+      .min(6, { message: "パスワードは6文字以上で入力してください" })
+      .max(255, { message: "パスワードは255文字以内で入力してください" }),
   })
 );
 const { errors, defineField, handleSubmit } = useForm({

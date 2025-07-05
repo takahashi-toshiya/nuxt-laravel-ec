@@ -12,9 +12,20 @@ const loadingStore = useLoadingStore();
 
 const schema = toTypedSchema(
   z.object({
-    name: z.string().min(1, { message: "Field is required" }),
-    email: z.string().min(1, { message: "Field is required" }),
-    gender: z.number().nullable(),
+    name: z
+      .string()
+      .min(1, { message: "お名前は必須です" })
+      .max(50, { message: "お名前は50文字以内で入力してください" })
+      .regex(/^[^\s].*[^\s]$|^[^\s]$/, { message: "お名前の前後に空白は使用できません" }),
+    email: z
+      .string()
+      .min(1, { message: "メールアドレスは必須です" })
+      .email({ message: "正しいメールアドレスを入力してください" })
+      .max(255, { message: "メールアドレスは255文字以内で入力してください" }),
+    gender: z
+      .number({ message: "性別を選択してください" })
+      .min(0, { message: "性別を選択してください" })
+      .max(1, { message: "正しい性別を選択してください" }),
   })
 );
 
@@ -23,7 +34,7 @@ const { errors, defineField, handleSubmit } = useForm({
   initialValues: {
     name: "",
     email: "",
-    gender: null,
+    gender: undefined,
   },
 });
 const [name, nameProps] = defineField("name");

@@ -53,6 +53,18 @@ const handleInput = (event: any) => {
   border: none;
   border-bottom: 1px solid #dadce0;
   width: 300px;
+  /* ダークモード対応 */
+  color-scheme: light;
+  background-color: white;
+  color: black;
+}
+
+/* Chrome autofill対応 */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: black !important;
 }
 .input:focus {
   border: 1px solid lightblue;
