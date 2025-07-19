@@ -1,0 +1,18 @@
+@startuml EC
+title 開発環境
+
+actor ユーザー
+
+package "Docker Environment" {
+  node "nginx\n(Reverse Proxy)" as nginx
+  node "frontend(SPA)\n(Nuxt.js)\nTypeScript, Vue 3" as frontend
+  node "backend\n(Laravel 11)\nPHP 8.2+\nSanctum Auth" as backend
+  node "database\n(MySQL 8.0)" as database
+}
+
+ユーザー -> nginx : HTTP Request
+nginx -> frontend : proxy to :3000
+frontend -> backend : REST API
+backend -> database : SQL
+
+@enduml
