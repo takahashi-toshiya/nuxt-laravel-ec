@@ -13,7 +13,7 @@ const props = defineProps<Props>();
 <template>
   <label class="title" :for="props.uniqueId">
     {{ props.label }}
-    <ValidationLabel mode="required" />
+    <ValidationLabel :mode="props.required ? 'required' : 'optional'" />
   </label>
 </template>
 

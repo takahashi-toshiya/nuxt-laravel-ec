@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CartItem, CartModel } from "~/types/model/CartModel";
+import type { CartItem } from "~/types/model/CartModel";
 
 type Props = {
   productId: number;
@@ -14,11 +14,11 @@ const cart = toRef(props, "cart");
 const quantity = computed(() => cart.value.quantity);
 
 const handleIncrement = () => {
-  emit('increment');
+  emit("increment");
 };
 
 const handleDecrementOrRemove = () => {
-  emit('decrementOrRemove');
+  emit("decrementOrRemove");
 };
 </script>
 

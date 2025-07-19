@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-export function useError() {
+export function useCustomError() {
   const isError = ref(false);
   const errorMessage = ref("");
 

@@ -3,7 +3,7 @@ import CardLayout from "@/components/layouts/CardLayout.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
-import FormField from "~/components/form/FormField.vue";
+import FormField from "~/components/common/FormField.vue";
 import { useUserStore } from "~/store/userStore";
 import FormLayout from "~/components/layouts/FormLayout.vue";
 import { getLoginUser } from "~/services/userService";

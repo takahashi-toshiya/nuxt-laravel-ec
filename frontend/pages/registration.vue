@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { toTypedSchema } from "@vee-validate/zod";
-import { Form, useForm } from "vee-validate";
+import { useForm } from "vee-validate";
 import { z } from "zod";
 import CardLayout from "~/components/layouts/CardLayout.vue";
-import FormField from "~/components/form/FormField.vue";
+import FormField from "~/components/common/FormField.vue";
 import FormLayout from "~/components/layouts/FormLayout.vue";
 
 const schema = toTypedSchema(
