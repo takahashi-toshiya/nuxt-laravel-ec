@@ -7,12 +7,19 @@ import FormField from "~/components/common/FormField.vue";
 import FormLayout from "~/components/layouts/FormLayout.vue";
 
 const schema = toTypedSchema(
-  z.object({
-    name: z.string().min(1, { message: "Field is required" }),
-    email: z.string().min(1, { message: "Field is required" }),
-    password: z.string().min(1, { message: "Field is required" }),
-    passwordConfirmation: z.string().min(1, { message: "Field is required" }),
-  })
+  z
+    .object({
+      name: z.string().min(1, { message: "名前は必須入力です。" }),
+      email: z.string().min(1, { message: "メールアドレスは必須入力です。" }),
+      password: z.string().min(1, { message: "パスワードは必須入力です。" }),
+      passwordConfirmation: z
+        .string()
+        .min(1, { message: "パスワード確認は必須入力です。" }),
+    })
+    .refine((data) => data.password === data.passwordConfirmation, {
+      message: "パスワードが一致しません。",
+      path: ["passwordConfirmation"],
+    })
 );
 const { errors, defineField, handleSubmit } = useForm({
   validationSchema: schema,
