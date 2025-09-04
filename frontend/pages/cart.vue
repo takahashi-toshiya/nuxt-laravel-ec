@@ -5,23 +5,20 @@ import { useI18n } from "vue-i18n";
 import Wrapper from "~/components/common/Wrapper.vue";
 import { useUserStore } from "~/store/userStore";
 import PaymentModal from "~/components/cart/PaymentModal.vue";
+import {
+  incrementQuantityUsecase,
+  decrementOrRemoveUsecase,
+} from "~/usecases/cartUsecase";
 
 const { t } = useI18n();
 const cartStore = useCartStore();
 const userStore = useUserStore();
 
-const handleIncrement = (productId: number) => {
-  cartStore.incrementQuantity(productId);
+const handleIncrement = async (productId: number) => {
+  await incrementQuantityUsecase(productId);
 };
-const handleDecrementOrRemove = (productId: number) => {
-  const item = cartStore.cart.get(productId);
-  if (item) {
-    if (item.quantity > 1) {
-      cartStore.decrementQuantity(productId);
-    } else {
-      cartStore.removeCart(productId);
-    }
-  }
+const handleDecrementOrRemove = async (productId: number) => {
+  await decrementOrRemoveUsecase(productId);
 };
 
 // 合計個数と合計金額の計算
@@ -114,7 +111,8 @@ const hideModal = () => {
 .cart__product-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 2%;
 }
 .cart__product-item {
   width: 32%;

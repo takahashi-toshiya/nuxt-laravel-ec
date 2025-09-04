@@ -22,4 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // カート関連
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart', [CartController::class, 'store']);
+    Route::put('/cart/{productId}', [CartController::class, 'update']);
+    Route::delete('/cart/{productId}', [CartController::class, 'destroy']);
 });

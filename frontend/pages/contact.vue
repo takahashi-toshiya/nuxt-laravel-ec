@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Gender from "~/components/pages/contact/Gender.vue";
-import SubmitButton from "~/components/pages/contact/SubmitButton.vue";
+import Button from "~/components/common/Button.vue";
 import CardLayout from "~/components/layouts/CardLayout.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
@@ -16,7 +16,9 @@ const schema = toTypedSchema(
       .string()
       .min(1, { message: "お名前は必須です" })
       .max(50, { message: "お名前は50文字以内で入力してください" })
-      .regex(/^[^\s].*[^\s]$|^[^\s]$/, { message: "お名前の前後に空白は使用できません" }),
+      .regex(/^[^\s].*[^\s]$|^[^\s]$/, {
+        message: "お名前の前後に空白は使用できません",
+      }),
     email: z
       .string()
       .min(1, { message: "メールアドレスは必須です" })
@@ -44,7 +46,7 @@ const [gender, genderProps] = defineField("gender");
 const handleSendForm = handleSubmit(async (values) => {
   await loadingStore.withLoading(async () => {
     // 実際のAPI呼び出しの代わりにdelay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     console.log(values);
     console.log("送信成功");
   }, "送信中...");
@@ -86,7 +88,11 @@ const handleSendForm = handleSubmit(async (values) => {
           />
         </div>
         <div class="submit-button">
-          <SubmitButton @click="handleSendForm" />
+          <Button
+            label="送信する"
+            color="blue"
+            @button-click="handleSendForm"
+          />
         </div>
       </form>
     </template>

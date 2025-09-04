@@ -10,9 +10,10 @@ describe("QuantityControl", () => {
       props: {
         productId: 1,
         cart: {
-          prodct: {
+          product: {
+            id: 1,
             name: "test",
-            price: "1000",
+            price: 1000,
             stock: 10,
             comment: "test",
             imagePath: "image",
@@ -41,9 +42,10 @@ describe("QuantityControl", () => {
       props: {
         productId: 1,
         cart: {
-          prodct: {
+          product: {
+            id: 1,
             name: "test",
-            price: "1000",
+            price: 1000,
             stock: 10,
             comment: "test",
             imagePath: "image",

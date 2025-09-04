@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "nuxt-mcp": {
+      "transport": {
+        "type": "sse",
+        "url": "http://localhost:3000/__mcp/sse"
+      }
+    }
+  }
+}

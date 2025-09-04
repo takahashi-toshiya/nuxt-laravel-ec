@@ -38,7 +38,7 @@ const { errors, defineField, handleSubmit } = useForm({
 const [email, emailProps] = defineField("email");
 const [password, passwordProps] = defineField("password");
 
-const loginError = ref<string | null>(null);
+const loginError = ref<string>();
 
 const handleLogin = handleSubmit(async (values) => {
   await loadingStore.withLoading(async () => {
@@ -68,6 +68,7 @@ const handleLogin = handleSubmit(async (values) => {
       <FormLayout
         buttonText="ログイン"
         buttonColor="blue"
+        :errorMessage="loginError"
         @submit="handleLogin"
       >
         <FormField

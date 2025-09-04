@@ -87,11 +87,22 @@ const cartMap = computed(() => {
   font-size: 16px;
 }
 .product-card__button {
-  background-color: #bf0000;
+  background-color: #007bff;
   color: #fff;
-  border-radius: 10px;
-  padding: 3px 12px;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
   margin: 10px auto 0;
   display: block;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 36px;
+  min-width: 120px;
+}
+
+.product-card__button:hover {
+  background-color: #0056b3;
 }
 </style>

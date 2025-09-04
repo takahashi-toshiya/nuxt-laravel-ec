@@ -20,4 +20,14 @@ class CartService
     {
         return $this->cartRepository->store($data);
     }
+
+    public function update(string $userId, int $productId, int $quantity)
+    {
+        return $this->cartRepository->update($userId, $productId, $quantity);
+    }
+
+    public function destroy(string $userId, int $productId)
+    {
+        return $this->cartRepository->destroy($userId, $productId);
+    }
 }
