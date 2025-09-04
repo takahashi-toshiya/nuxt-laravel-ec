@@ -10,20 +10,17 @@ const handleClick = (event: MouseEvent) => {
 
 <style scoped>
 .button {
-  color: #fff;
-  background-color: #6cb2eb;
+  padding: 3px 8px;
+  border-radius: 3px;
   border: none;
-  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  background-color: red;
   width: 300px;
   line-height: 40px;
   font-weight: 700;
-  box-shadow: 0px 2px 2px 0px #000000;
 }
 .button:hover {
-  background-color: #6cb2eb;
-}
-.button:active {
-  box-shadow: none;
-  transform: translateY(2px);
+  background-color: darkred;
 }
 </style>

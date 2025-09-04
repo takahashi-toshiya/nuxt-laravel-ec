@@ -3,7 +3,7 @@ import CardLayout from "@/components/layouts/CardLayout.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
-import FormField from "~/components/form/FormField.vue";
+import FormField from "~/components/common/FormField.vue";
 import { useUserStore } from "~/store/userStore";
 import FormLayout from "~/components/layouts/FormLayout.vue";
 import { getLoginUser } from "~/services/userService";
@@ -38,7 +38,7 @@ const { errors, defineField, handleSubmit } = useForm({
 const [email, emailProps] = defineField("email");
 const [password, passwordProps] = defineField("password");
 
-const loginError = ref<string | null>(null);
+const loginError = ref<string>();
 
 const handleLogin = handleSubmit(async (values) => {
   await loadingStore.withLoading(async () => {
@@ -68,6 +68,7 @@ const handleLogin = handleSubmit(async (values) => {
       <FormLayout
         buttonText="ログイン"
         buttonColor="blue"
+        :errorMessage="loginError"
         @submit="handleLogin"
       >
         <FormField

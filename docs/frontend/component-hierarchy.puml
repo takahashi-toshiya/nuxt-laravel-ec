@@ -1,0 +1,32 @@
+@startmindmap
+* App
+** Layout
+*** Header
+*** Footer
+** 共通コンポーネント（汎用）
+*** Button
+*** TextInput
+*** Image
+*** Wrapper
+*** FormField
+** 機能コンポーネント（依存関係）
+*** LoadingOverlay
+**** LoadingSpinner
+*** ProductList
+**** ProductCard
+***** QuantityControl
+*** BaseModal
+**** ErrorModal
+**** LoginRequiredModal
+
+** ページ固有コンポーネント
+*** Contact
+**** ItemTitle
+***** ValidationLabel
+**** TextField
+**** Gender
+**** SubmitButton
+*** Top
+**** Product (※ProductListを使用)
+**** Slider
+@endmindmap

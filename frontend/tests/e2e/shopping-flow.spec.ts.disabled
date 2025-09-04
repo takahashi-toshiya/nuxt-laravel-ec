@@ -1,0 +1,30 @@
+import { test } from "@playwright/test";
+
+// 決済処理が完成してないため一旦無効化
+test("商品をカートに入れ決済ができること", async ({ page }) => {
+  // Home ページにアクセス
+  await page.goto("http://localhost:3000");
+
+  await page.click("text = ログイン");
+
+  await page.fill("#email", "example@google.com");
+
+  await page.fill("#password", "password");
+
+  // ログインボタンをクリック
+  await page.click(".form-button button");
+
+  // ホームページにリダイレクトされることを確認
+  await page.waitForURL("http://localhost:3000");
+
+  // ユーザードロップダウンをクリックして開く
+  await page.click(".nav__toggle");
+
+  // カートを見るをクリック
+  await page.click("text=カートを見る");
+
+  // カートページに遷移することを確認
+  await page.waitForURL("http://localhost:3000/cart");
+
+  // 決済処理が完成したら先を実装
+});

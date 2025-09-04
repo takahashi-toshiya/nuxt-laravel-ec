@@ -44,11 +44,11 @@ const handleClickOutside = (event: Event) => {
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
+  document.addEventListener("click", handleClickOutside);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+  document.removeEventListener("click", handleClickOutside);
 });
 </script>
 
@@ -57,7 +57,7 @@ onUnmounted(() => {
     <NuxtLink to="/"><img src="/public/image/logo.png" /></NuxtLink>
 
     <!-- ログイン状態のナビゲーション -->
-    <nav class="nav" v-if="isLogged">
+    <nav id="login" class="nav" v-if="isLogged">
       <ul class="nav__list">
         <li
           class="nav__item nav__dropdown-wrapper"
@@ -89,7 +89,7 @@ onUnmounted(() => {
     </nav>
 
     <!-- 非ログイン状態のナビゲーション -->
-    <nav class="nav" v-else>
+    <nav id="not-login" class="nav" v-else>
       <ul class="nav__list">
         <li class="nav__item">
           <Button label="ログイン" color="red" @button-click="handleLogin" />

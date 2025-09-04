@@ -6,21 +6,7 @@ type Props = {
   product: ProductModel;
   showComment?: boolean;
 };
-const props = withDefaults(
-  defineProps<{
-    product: ProductModel;
-    showComment?: boolean;
-  }>(),
-  {
-    showComment: true,
-  }
-);
-
-const emit = defineEmits(["cartButtonClick"]);
-
-const cartButtonClick = (productId: number) => {
-  emit("cartButtonClick", productId);
-};
+const { product, showComment = true } = defineProps<Props>();
 </script>
 
 <template>
@@ -31,7 +17,7 @@ const cartButtonClick = (productId: number) => {
   />
   <p class="product-card__title">{{ product.name }}</p>
   <p class="product-card__price">{{ product.price?.toLocaleString() }}</p>
-  <p v-if="showComment !== false" class="product-card__comment">
+  <p v-if="showComment" class="product-card__comment">
     {{ product.comment }}
   </p>
 

@@ -10,12 +10,13 @@ import type { ProductModel } from "~/types/model/ProductModel";
 import {
   addCartUsecase,
   incrementQuantityUsecase,
+  decrementOrRemoveUsecase,
 } from "~/usecases/cartUsecase";
 
 const router = useRouter();
 const cartStore = useCartStore();
 const { t } = useI18n();
-const { isError, errorMessage, showError } = useError();
+const { isError, errorMessage, showError } = useCustomError();
 const { isLoggedIn } = useUserStore();
 const loadingStore = useLoadingStore();
 
@@ -50,8 +51,8 @@ const handleIncrement = async (productId: number) => {
   await incrementQuantityUsecase(productId);
 };
 
-const handleDecrementOrRemove = (productId: number) => {
-  console.log("devre");
+const handleDecrementOrRemove = async (productId: number) => {
+  await decrementOrRemoveUsecase(productId);
 };
 
 const handleLoginRequiredCOnfirm = () => {
@@ -60,7 +61,10 @@ const handleLoginRequiredCOnfirm = () => {
 
 onMounted(async () => {
   await fetchProducts();
-  await loadingStore.withLoading(() => cartStore.getCart(), "カート情報を読み込み中...");
+  await loadingStore.withLoading(
+    () => cartStore.getCart(),
+    "カート情報を読み込み中..."
+  );
 });
 </script>
 
@@ -86,7 +90,11 @@ onMounted(async () => {
       :message="t('product.login_required')"
       @confirm="handleLoginRequiredCOnfirm"
     />
-    <ErrorModal v-if="isError" :message="errorMessage" @confirm="fetchProducts" />
+    <ErrorModal
+      v-if="isError"
+      :message="errorMessage"
+      @confirm="fetchProducts"
+    />
   </div>
 </template>
 

@@ -2,6 +2,7 @@ import { useCartStore } from "~/store/cartStore";
 import {
   addCartService,
   updateCartQuantityService,
+  removeCartItemService,
 } from "~/services/cartService";
 
 export async function addCartUsecase(
@@ -20,4 +21,19 @@ export async function incrementQuantityUsecase(productId: number) {
   if (!item) return;
 
   await updateCartQuantityService(productId, item.quantity);
+}
+
+export async function decrementOrRemoveUsecase(productId: number) {
+  const store = useCartStore();
+  const item = store.cart.get(productId);
+  
+  if (!item) return;
+
+  if (item.quantity > 1) {
+    store.decrementQuantity(productId);
+    await updateCartQuantityService(productId, item.quantity - 1);
+  } else {
+    store.removeCart(productId);
+    await removeCartItemService(productId);
+  }
 }

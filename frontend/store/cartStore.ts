@@ -13,7 +13,6 @@ export const useCartStore = defineStore("cart", {
   actions: {
     async getCart() {
       const response = await fetchCart();
-      console.log(response);
       const cartMap = new Map<number, CartItem>();
 
       response.forEach((item) => {
